@@ -17,8 +17,10 @@ public class Cliente {
     private UUID id;
     private String nome;
     private String email;
-    //TODO colocar como entidade endereço
-    private String endereço;
+
+    @ManyToOne
+    @JoinColumn(name = "endereço_cep")
+    private Endereco endereco;
 
 
 
