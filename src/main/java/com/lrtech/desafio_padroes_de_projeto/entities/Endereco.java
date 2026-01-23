@@ -33,6 +33,5 @@ public class Endereco {
     private String ddd;
     private String siafi;
 
-    @OneToMany(mappedBy = "endereco")
-    private List<Cliente> clientes = new ArrayList<Cliente>();
+
 }
