@@ -1,12 +1,15 @@
 package com.lrtech.desafio_padroes_de_projeto.services;
 
+import com.lrtech.desafio_padroes_de_projeto.DTO.ClienteDTO;
 import com.lrtech.desafio_padroes_de_projeto.entities.Cliente;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ClienteService {
-    public Cliente findByNome(UUID id);
+    public ClienteDTO findById(UUID id);
+    public List<Cliente> findAll();
     public void deleteCliente(UUID id);
-    public void atualizarCliente(UUID id,Cliente cliente);
-    public void saveCliente(Cliente cliente);
+    public ClienteDTO atualizarCliente(UUID id,ClienteDTO dto);
+    public ClienteDTO saveCliente(ClienteDTO dto);
 }
