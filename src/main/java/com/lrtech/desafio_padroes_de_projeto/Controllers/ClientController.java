@@ -25,9 +25,6 @@ public class ClientController {
     @Autowired
     private CepService cepService;
 
-    //TODO controle de acesso?
-    //TODO variavel de ambiente
-    //TODO validar os restos dos campos que precisar
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getCliente(@PathVariable UUID id) {
