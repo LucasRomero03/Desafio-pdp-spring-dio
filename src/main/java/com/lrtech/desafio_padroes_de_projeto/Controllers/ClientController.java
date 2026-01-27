@@ -1,11 +1,9 @@
 package com.lrtech.desafio_padroes_de_projeto.Controllers;
 
 import com.lrtech.desafio_padroes_de_projeto.DTO.ClienteDTO;
-import com.lrtech.desafio_padroes_de_projeto.entities.Cliente;
-import com.lrtech.desafio_padroes_de_projeto.entities.Endereco;
-import com.lrtech.desafio_padroes_de_projeto.repositories.ClientRepository;
-import com.lrtech.desafio_padroes_de_projeto.services.CepService;
-import com.lrtech.desafio_padroes_de_projeto.services.ClienteServiceImpl;
+import com.lrtech.desafio_padroes_de_projeto.Repositories.ClientRepository;
+import com.lrtech.desafio_padroes_de_projeto.Services.CepService;
+import com.lrtech.desafio_padroes_de_projeto.Services.ClienteServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +27,7 @@ public class ClientController {
 
     //TODO controle de acesso?
     //TODO variavel de ambiente
+    //TODO validar os restos dos campos que precisar
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getCliente(@PathVariable UUID id) {

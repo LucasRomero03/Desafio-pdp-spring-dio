@@ -1,6 +1,6 @@
-package com.lrtech.desafio_padroes_de_projeto.repositories;
+package com.lrtech.desafio_padroes_de_projeto.Repositories;
 
-import com.lrtech.desafio_padroes_de_projeto.entities.Cliente;
+import com.lrtech.desafio_padroes_de_projeto.Entities.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

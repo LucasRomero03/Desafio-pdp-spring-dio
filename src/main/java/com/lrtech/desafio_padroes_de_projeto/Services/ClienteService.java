@@ -1,4 +1,4 @@
-package com.lrtech.desafio_padroes_de_projeto.services;
+package com.lrtech.desafio_padroes_de_projeto.Services;
 
 import com.lrtech.desafio_padroes_de_projeto.DTO.ClienteDTO;
 import org.springframework.data.domain.Page;
