@@ -7,6 +7,8 @@ import com.lrtech.desafio_padroes_de_projeto.repositories.ClientRepository;
 import com.lrtech.desafio_padroes_de_projeto.services.CepService;
 import com.lrtech.desafio_padroes_de_projeto.services.ClienteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,15 +27,9 @@ public class ClientController {
     @Autowired
     private CepService cepService;
 
-    //TODO colocar paginado
     //TODO colocar xeception handler
     //TODO validation bean "@Valid"
     //TODO controle de acesso?
-    //TODO read me
-    //CHECK
-    //TODO OPEN API doc ajustar
-    //TODO aplicar DTO(record)
-    //TODO colocar os response entities
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getCliente(@PathVariable UUID id) {
@@ -47,15 +43,10 @@ public class ClientController {
         return ResponseEntity.created(uri).body(dto1);
         //return ResponseEntity.ok().body(dto);
     }
-    @GetMapping("/hello/{cep}")
-    public Endereco hello(@PathVariable String cep) {
-        return cepService.consultarEndereco(cep);
-    }
 
-    //TODO refatorar aqui para trazer os dto usar stream para mapear de um tipo para o outro
     @GetMapping()
-    public ResponseEntity<List<Cliente>> getAllClientes() {
-        return ResponseEntity.ok().body(clientRepository.findAll());
+    public ResponseEntity<Page<ClienteDTO>> getAllClientes(Pageable pageable) {
+        return ResponseEntity.ok().body(clienteService.findAll(pageable));
     }
 
     @PutMapping("/{id}")
@@ -65,6 +56,7 @@ public class ClientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable UUID id) {
+        clienteService.deleteCliente(id);
         return  ResponseEntity.noContent().build();
     }
 }

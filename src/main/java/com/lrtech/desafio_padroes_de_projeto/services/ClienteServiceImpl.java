@@ -1,13 +1,15 @@
 package com.lrtech.desafio_padroes_de_projeto.services;
 
 import com.lrtech.desafio_padroes_de_projeto.DTO.ClienteDTO;
+import com.lrtech.desafio_padroes_de_projeto.Exceptions.UserNotFoundException;
 import com.lrtech.desafio_padroes_de_projeto.entities.Cliente;
 import com.lrtech.desafio_padroes_de_projeto.entities.Endereco;
 import com.lrtech.desafio_padroes_de_projeto.repositories.ClientRepository;
 import com.lrtech.desafio_padroes_de_projeto.repositories.EnderecoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,11 +29,11 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteDTO saveCliente(ClienteDTO dto) {
-        if (!dto.endereco().getCep().matches("\\d{5}-\\d{3}") || !dto.endereco().getCep().matches("\\d{8}")) {
+        if (!dto.endereco().getCep().matches("\\d{5}-\\d{3}")) {
             throw new RuntimeException("cep em formato invalido");
         };
-
-        Cliente cliente = salvarComCep(dto);
+        Cliente cliente = new Cliente();
+        dtoToCliente(cliente, dto);
         clientRepository.save(cliente);
         return dto;
     }
@@ -43,24 +45,17 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<Cliente> findAll() {
-        return clientRepository.findAll();
+    public Page<ClienteDTO> findAll(Pageable pageable) {
+        Page<Cliente> pageClientes = clientRepository.findAll(pageable);
+        return pageClientes.map(x -> new ClienteDTO(x.getId(), x.getNome(), x.getEmail(), x.getEndereco()));//clientRepository.findAll();
     }
 
-    //ajeitar atualizar to criando
     @Override
     public ClienteDTO atualizarCliente(UUID id, ClienteDTO dto) {
         //ajeitar esse repetição do busca endereço
         existeCliente(id);
         Cliente cliente = clientRepository.findById(id).get();
-        Endereco endereco = enderecoRepository.findById(dto.endereco().getCep()).orElseGet(() -> {
-            Endereco enderecoIntegrado = cepService.consultarEndereco(dto.endereco().getCep());
-            enderecoRepository.save(enderecoIntegrado);
-            return enderecoIntegrado;
-        });
-        cliente.setNome(dto.nome());
-        cliente.setEmail(dto.email());
-        cliente.setEndereco(endereco);
+        dtoToCliente(cliente, dto);
         clientRepository.save(cliente);
         return dto;
     }
@@ -73,22 +68,24 @@ public class ClienteServiceImpl implements ClienteService {
 
     private void existeCliente(UUID id) {
         if(clientRepository.findById(id).isEmpty()){
-            throw new RuntimeException("Usuario não existe na base de dados ");
+            throw new UserNotFoundException("Usuario não existe na base de dados ");
         }
     }
 
-    private Cliente salvarComCep(ClienteDTO dto) {
-        Endereco endereco = enderecoRepository.findById(dto.endereco().getCep()).orElseGet(() -> {
-            Endereco enderecoIntegrado = cepService.consultarEndereco(dto.endereco().getCep());
+    private Endereco resgatarCep(String cep) {
+        Endereco endereco = enderecoRepository.findById(cep).orElseGet(() -> {
+            Endereco enderecoIntegrado = cepService.consultarEndereco(cep);
             enderecoRepository.save(enderecoIntegrado);
             return enderecoIntegrado;
         });
-        Cliente clienteSalvo = new Cliente();
-        clienteSalvo.setId(dto.id());
-        clienteSalvo.setNome(dto.nome());
-        clienteSalvo.setEmail(dto.email());
 
-        clienteSalvo.setEndereco(endereco);
-        return  clienteSalvo;
+        return  endereco;
+    }
+
+    private void dtoToCliente(Cliente entity, ClienteDTO dto) {
+        entity.setNome(dto.nome());
+        entity.setEmail(dto.email());
+        Endereco endereco = resgatarCep(dto.endereco().getCep());
+        entity.setEndereco(endereco);
     }
 }
