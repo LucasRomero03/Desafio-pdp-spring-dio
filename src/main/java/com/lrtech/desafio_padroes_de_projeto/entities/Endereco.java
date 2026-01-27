@@ -2,14 +2,11 @@ package com.lrtech.desafio_padroes_de_projeto.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "tb_Enderecos")
@@ -19,6 +16,7 @@ import java.util.List;
 public class Endereco {
 
     @Id
+    @Pattern(regexp = "\\d{5}-?\\d{3}")
     private String cep;
     private String logradouro;
     private String complemento;

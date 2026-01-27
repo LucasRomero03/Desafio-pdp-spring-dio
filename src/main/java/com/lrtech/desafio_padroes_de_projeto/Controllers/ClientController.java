@@ -6,6 +6,7 @@ import com.lrtech.desafio_padroes_de_projeto.entities.Endereco;
 import com.lrtech.desafio_padroes_de_projeto.repositories.ClientRepository;
 import com.lrtech.desafio_padroes_de_projeto.services.CepService;
 import com.lrtech.desafio_padroes_de_projeto.services.ClienteServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +28,8 @@ public class ClientController {
     @Autowired
     private CepService cepService;
 
-    //TODO colocar xeception handler
-    //TODO validation bean "@Valid"
     //TODO controle de acesso?
+    //TODO variavel de ambiente
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getCliente(@PathVariable UUID id) {
@@ -37,7 +37,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> saveCliente(@RequestBody ClienteDTO dto) {
+    public ResponseEntity<ClienteDTO> saveCliente(@Valid @RequestBody ClienteDTO dto) {
         ClienteDTO dto1 = clienteService.saveCliente(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto1.id()).toUri();
         return ResponseEntity.created(uri).body(dto1);

@@ -25,13 +25,9 @@ public class ClienteServiceImpl implements ClienteService {
         this.enderecoRepository = enderecoRepository;
         this.cepService = cepService;
     }
-    //TODO ajeitar exeções
 
     @Override
     public ClienteDTO saveCliente(ClienteDTO dto) {
-        if (!dto.endereco().getCep().matches("\\d{5}-\\d{3}")) {
-            throw new RuntimeException("cep em formato invalido");
-        };
         Cliente cliente = new Cliente();
         dtoToCliente(cliente, dto);
         clientRepository.save(cliente);
