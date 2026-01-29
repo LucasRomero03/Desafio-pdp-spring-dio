@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CepService {
     //@RequestMapping(method = RequestMethod.GET, value = "/{cep}/json/")
     @GetMapping(  "/{cep}/json/") //funciona tbm com as anotações do spring
-    public Endereco consultarEndereco(@PathVariable("cep") String cep);
+     Endereco consultarEndereco(@PathVariable("cep") String cep);
 
 }
