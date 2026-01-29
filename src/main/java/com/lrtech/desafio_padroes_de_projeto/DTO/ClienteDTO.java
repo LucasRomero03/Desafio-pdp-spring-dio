@@ -9,5 +9,6 @@ import java.util.UUID;
 public record ClienteDTO(UUID id,
                          @NotBlank(message = "Campo Obrigatório") String nome,
                          String email,
+                         String senha,
                          @Valid Endereco endereco) {
 }
