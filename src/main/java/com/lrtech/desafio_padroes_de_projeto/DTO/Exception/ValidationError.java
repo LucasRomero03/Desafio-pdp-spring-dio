@@ -1,4 +1,4 @@
-package com.lrtech.desafio_padroes_de_projeto.DTO;
+package com.lrtech.desafio_padroes_de_projeto.DTO.Exception;
 
 import lombok.Getter;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class ValidationError  extends CustomError{
+public class ValidationError  extends CustomError {
 
     private List<FieldMessage> errors = new ArrayList<>();
 

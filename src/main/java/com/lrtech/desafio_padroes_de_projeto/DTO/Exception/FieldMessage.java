@@ -1,4 +1,4 @@
-package com.lrtech.desafio_padroes_de_projeto.DTO;
+package com.lrtech.desafio_padroes_de_projeto.DTO.Exception;
 
 import lombok.Getter;
 
