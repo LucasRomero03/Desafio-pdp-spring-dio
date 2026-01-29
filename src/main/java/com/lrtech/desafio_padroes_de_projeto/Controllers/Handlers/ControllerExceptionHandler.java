@@ -1,7 +1,7 @@
 package com.lrtech.desafio_padroes_de_projeto.Controllers.Handlers;
 
-import com.lrtech.desafio_padroes_de_projeto.DTO.CustomError;
-import com.lrtech.desafio_padroes_de_projeto.DTO.ValidationError;
+import com.lrtech.desafio_padroes_de_projeto.DTO.Exception.CustomError;
+import com.lrtech.desafio_padroes_de_projeto.DTO.Exception.ValidationError;
 import com.lrtech.desafio_padroes_de_projeto.Exceptions.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

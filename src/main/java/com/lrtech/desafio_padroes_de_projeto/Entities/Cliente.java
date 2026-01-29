@@ -2,9 +2,9 @@ package com.lrtech.desafio_padroes_de_projeto.Entities;
 
 import com.lrtech.desafio_padroes_de_projeto.Entities.Enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
-import org.apache.catalina.UserDatabase;
-import org.jspecify.annotations.Nullable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_Clintes")
+@Table(name = "tb_Clientes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

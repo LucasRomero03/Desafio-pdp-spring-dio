@@ -1,59 +1,69 @@
 package com.lrtech.desafio_padroes_de_projeto.Services;
 
 import com.lrtech.desafio_padroes_de_projeto.DTO.ClienteDTO;
-import com.lrtech.desafio_padroes_de_projeto.Exceptions.UserNotFoundException;
+import com.lrtech.desafio_padroes_de_projeto.DTO.ResponseClienteDto;
 import com.lrtech.desafio_padroes_de_projeto.Entities.Cliente;
 import com.lrtech.desafio_padroes_de_projeto.Entities.Endereco;
+import com.lrtech.desafio_padroes_de_projeto.Entities.Enums.Role;
+import com.lrtech.desafio_padroes_de_projeto.Exceptions.UserNotFoundException;
 import com.lrtech.desafio_padroes_de_projeto.Repositories.ClientRepository;
 import com.lrtech.desafio_padroes_de_projeto.Repositories.EnderecoRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class ClienteServiceImpl implements ClienteService {
+public class ClienteServiceImpl implements ClienteService  {
     private final ClientRepository  clientRepository;
     private final EnderecoRepository enderecoRepository;
     private final CepService cepService;
+    private final PasswordEncoder passwordEncoder;
 
     public ClienteServiceImpl(ClientRepository clientRepository,
                               EnderecoRepository enderecoRepository,
-                              CepService cepService) {
+                              CepService cepService, PasswordEncoder passwordEncoder) {
         this.clientRepository = clientRepository;
         this.enderecoRepository = enderecoRepository;
         this.cepService = cepService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public ClienteDTO saveCliente(ClienteDTO dto) {
+    public ResponseClienteDto saveCliente(ClienteDTO dto) {
         Cliente cliente = new Cliente();
         dtoToCliente(cliente, dto);
         clientRepository.save(cliente);
-        return dto;
+        return new ResponseClienteDto(cliente.getId(),cliente.getNome(),cliente.getEmail(),cliente.getEndereco());
     }
+
     @Override
-    public ClienteDTO findById(UUID id) {
+    public Cliente findByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
+    @Override
+    public ResponseClienteDto findById(UUID id) {
         existeCliente(id);
         Cliente cliente = clientRepository.findById(id).get();
-        return new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getEmail(), cliente.getEndereco());
+        return new ResponseClienteDto(cliente.getId(), cliente.getNome(), cliente.getEmail(), cliente.getEndereco());
     }
 
     @Override
-    public Page<ClienteDTO> findAll(Pageable pageable) {
+    public Page<ResponseClienteDto> findAll(Pageable pageable) {
         Page<Cliente> pageClientes = clientRepository.findAll(pageable);
-        return pageClientes.map(x -> new ClienteDTO(x.getId(), x.getNome(), x.getEmail(), x.getEndereco()));//clientRepository.findAll();
+        return pageClientes.map(x -> new ResponseClienteDto(x.getId(), x.getNome(), x.getEmail(),x.getEndereco()));
     }
 
     @Override
-    public ClienteDTO atualizarCliente(UUID id, ClienteDTO dto) {
-        //ajeitar esse repetição do busca endereço
+    public ResponseClienteDto atualizarCliente(UUID id, ClienteDTO dto) {
         existeCliente(id);
         Cliente cliente = clientRepository.findById(id).get();
         dtoToCliente(cliente, dto);
         clientRepository.save(cliente);
-        return dto;
+        return new ResponseClienteDto(cliente.getId(),cliente.getNome(),cliente.getEmail(),cliente.getEndereco());
     }
 
     @Override
@@ -81,7 +91,11 @@ public class ClienteServiceImpl implements ClienteService {
     private void dtoToCliente(Cliente entity, ClienteDTO dto) {
         entity.setNome(dto.nome());
         entity.setEmail(dto.email());
+        entity.setSenha(passwordEncoder.encode(dto.senha()));
         Endereco endereco = resgatarCep(dto.endereco().getCep());
         entity.setEndereco(endereco);
+        entity.setRole(Role.USER);
     }
+
+
 }
