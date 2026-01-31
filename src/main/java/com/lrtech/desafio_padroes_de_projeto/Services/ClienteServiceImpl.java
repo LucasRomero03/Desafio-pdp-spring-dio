@@ -60,7 +60,7 @@ public class ClienteServiceImpl implements ClienteService  {
     @Override
     public ResponseClienteDto atualizarCliente(UUID id, ClienteDTO dto) {
         existeCliente(id);
-        Cliente cliente = clientRepository.findById(id).get();
+        Cliente cliente = clientRepository.findById(id).orElseThrow(() -> new UserNotFoundException("cliente nao encontrado"));
         dtoToCliente(cliente, dto);
         clientRepository.save(cliente);
         return new ResponseClienteDto(cliente.getId(),cliente.getNome(),cliente.getEmail(),cliente.getEndereco());
